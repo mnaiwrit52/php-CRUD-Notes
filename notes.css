@@ -1,0 +1,14 @@
+.navbar-brand img{
+    width: 3.5rem;
+    height: 2rem;
+    object-fit:cover;
+}
+
+.form-container{
+    padding: 1rem;
+}
+
+.container form{
+    width: 70rem;
+}
+
