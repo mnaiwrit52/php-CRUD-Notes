@@ -45,21 +45,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
 
     <!-- Edit Modal Starts -->
-    <!-- Button trigger modal -->
-    <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">
-        Edit
-    </button> -->
-
-    <!-- Modal -->
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="editModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="editModalLabel">Edit Note</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <form>
+                        <div class="mb-3">
+                            <label for="editTitle" class="form-label">Note Title</label>
+                            <input type="text" class="form-control" name="editTitle" id="editTitle" aria-describedby="editTitle">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDesc" class="form-label">Description</label>
+                            <textarea class="form-control" name="editDesc" id="editDesc" cols="30" rows="7"></textarea>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -69,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
     <!-- Edit Modal Ends -->
+
     <!-- Navbar Starts -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
@@ -140,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <th scope="row">' . $s_no . '</th>
                 <td>' . $row['title'] . '</td>
                 <td>' . $row['description'] . '</td>
-                <td><button class="edit btn btn-primary">Edit</button><a href="/del">Delete</a></td>
+                <td><button class="edit btn btn-primary">Edit</button> <a href="/del">Delete</a></td>
                 </tr>';
                 }
                 ?>
@@ -160,7 +164,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <!-- Datatable JS -->
     <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <script>let table = new DataTable('#myTable');</script>
     <script src="notes.js"></script>
 </body>
 
