@@ -1,6 +1,7 @@
 <?php
 
 $showAlert = false;
+$edited = false;
 
 //Connect to database
 $servername = "localhost";
@@ -17,16 +18,35 @@ if (!$conn) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $title = $_POST['title'];
-    $description = $_POST['desc'];
+    if (isset($_POST['snoEdit'])) {
+        //Update Query
+        $title = $_POST['editTitle'];
+        $sno = $_POST['snoEdit'];
+        $description = $_POST['editDesc'];
 
-    //SQL Query to be executed
-    $sql = "INSERT INTO `notes` (`s_no`, `title`, `description`, `tstamp`) VALUES (NULL, '$title', '$description', current_timestamp())";
-    $result = mysqli_query($conn, $sql);
+        //SQL Query to be executed
+        $sql = "UPDATE `notes` SET `title` = '$title', `description` = '$description' WHERE `notes`.`s_no` = '$sno'";
+        $result = mysqli_query($conn, $sql);
 
-    if ($result) {
-        $showAlert = true;
+        if($result){
+            $edited = true; 
+        }
     }
+    else
+    {
+        $title = $_POST['title'];
+        $description = $_POST['desc'];
+    
+        //SQL Query to be executed
+        $sql = "INSERT INTO `notes` (`s_no`, `title`, `description`, `tstamp`) VALUES (NULL, '$title', '$description', current_timestamp())";
+        $result = mysqli_query($conn, $sql);
+    
+        if ($result) {
+            $showAlert = true;
+        }
+
+    }
+
 }
 ?>
 
@@ -53,7 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form action="./index.php" method="POST">
+                        <input type="hidden" name="snoEdit" id="snoEdit">
                         <div class="mb-3">
                             <label for="editTitle" class="form-label">Note Title</label>
                             <input type="text" class="form-control" name="editTitle" id="editTitle" aria-describedby="editTitle">
@@ -62,11 +83,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <label for="editDesc" class="form-label">Description</label>
                             <textarea class="form-control" name="editDesc" id="editDesc" cols="30" rows="7"></textarea>
                         </div>
+                        <button type="submit" class="btn btn-primary">Update Note</button>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
@@ -93,13 +114,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </nav>
     <!-- Navbar Ends -->
 
+    <!-- Successfully data entried alert starts -->
     <?php
     if ($showAlert) {
         echo ' <div class="alert alert-success alert-dismissible fade show" role="alert">
-                  <strong>Success!</strong> Note has been inserted successfully<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div> ';
+        <strong>Success!</strong> Note has been inserted successfully<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div> ';
     }
     ?>
+    <!-- Successfully data entried alert ends -->
+
+    <!-- Updation success alert starts-->
+    <?php
+    if ($edited) {
+        echo ' <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        <strong>Success!</strong> Note has been updated successfully<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div> ';
+    }
+    ?>
+    <!-- Updation success alert ends -->
+
 
     <!-- Note Form starts -->
     <div class="container d-flex flex-column align-items-center my-3">
@@ -137,14 +171,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <?php
                 $sql = "SELECT * FROM `notes`";
                 $result = mysqli_query($conn, $sql);
-                $s_no = 0;
+                $sno = 0;
                 while ($row = mysqli_fetch_assoc($result)) {
-                    $s_no = $s_no + 1;
+                    $sno = $sno + 1;
                     echo '<tr>
-                <th scope="row">' . $s_no . '</th>
+                <th scope="row">' . $sno . '</th>
                 <td>' . $row['title'] . '</td>
                 <td>' . $row['description'] . '</td>
-                <td><button class="edit btn btn-primary">Edit</button> <a href="/del">Delete</a></td>
+                <td><button class="edit btn btn-primary" id=' . $row['s_no'] . '>Edit</button> <a href="/del">Delete</a></td>
                 </tr>';
                 }
                 ?>

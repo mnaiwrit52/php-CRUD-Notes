@@ -8,6 +8,8 @@ Array.from(edits).forEach((element) =>{
         console.log("Edit ", title, description);
         editTitle.value = title;
         editDesc.value = description;
+        document.querySelector("#snoEdit").value = e.target.id;
+        console.log(e.target.id);
         $('#editModal').modal('toggle');
     })
 })
