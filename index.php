@@ -2,6 +2,7 @@
 
 $showAlert = false;
 $edited = false;
+$delete = false;
 
 //Connect to database
 $servername = "localhost";
@@ -16,6 +17,14 @@ $conn = mysqli_connect($servername, $username, $password, $database);
 if (!$conn) {
     die("Sorry we failed to connect: " . mysqli_connect_error());
 }
+
+if(isset($_GET['delete'])){
+    $sno = $_GET['delete'];
+    $delete = true;
+    $sql = "DELETE FROM `notes` WHERE `notes`.`s_no` = $sno";
+    $result = mysqli_query($conn, $sql);
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['snoEdit'])) {
@@ -114,6 +123,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </nav>
     <!-- Navbar Ends -->
 
+    <!-- Deleted data successfully alert starts-->
+    <?php
+    if ($delete) {
+        echo ' <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Success!</strong> Note has been deleted successfully<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div> ';
+    }
+    ?>
+    <!-- Deleted data successfully alert ends  -->
+
+
     <!-- Successfully data entried alert starts -->
     <?php
     if ($showAlert) {
@@ -178,7 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <th scope="row">' . $sno . '</th>
                 <td>' . $row['title'] . '</td>
                 <td>' . $row['description'] . '</td>
-                <td><button class="edit btn btn-primary" id=' . $row['s_no'] . '>Edit</button> <a href="/del">Delete</a></td>
+                <td><button class="edit btn btn-primary" id=' . $row['s_no'] . '>Edit</button> <button class="delete btn btn-primary" id=d' . $row['s_no'] . '>Delete</button></td>
                 </tr>';
                 }
                 ?>
